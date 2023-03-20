@@ -18,6 +18,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def open_browser():
     '''This launches browser.'''
+    executable_path = {'executable_path': ChromeDriverManager().install()}
     #browser = webdriver.Chrome()
     #global browser
     browser = Browser('chrome')
@@ -78,7 +79,7 @@ def mars_table():
     return scraped_table
 
 
-def hemispheres():
+def hemispheres(browser):
     url_hemis = 'https://marshemispheres.com/'
     html_content = requests.get(url_hemis).text
     soup = bs4(html_content, "html.parser")
@@ -88,12 +89,17 @@ def hemispheres():
     #  img_url: #url
     #  })
     hemi_urls = []
-    for item in soup.find_all(class_='thumb'):
+    links = [link for link in browser.find_by_css('div.description a')]
         #print(item['src'])
-        hemi_urls.append(item['src'])
-    return hemi_urls
+    for link in links:
+        link.click()
+        img_url = browser.links.find_by_partial_href('full.jpg').first['href']
+        title = ' '.join(browser.find_by_css('h2.title').text.split()[:-2])
+        hemi_urls.append({'img_url': img_url, 'title': title})
+        browser.back()
 
-    #return [#list of dictionaries]
+    #return list of links    
+    return hemi_urls
     
 
 def scrape():
