@@ -46,31 +46,48 @@
             alt="Responsive image"
           />
         </div>
-
+        <style>  
+.splitimage {
+              max-height: 100%;
+              max-width: 100%;
+              width: 33.3333%;
+              /* as there are 3 images in a line*/
+            }
+            .keeptogether {
+              width: 100%;
+              overflow: hidden;
+              white-space: nowrap;
+              line-height: 0;
+              word-spacing: -4px;
+            }
+      </style>
   <div class="col-md-4">
           <!-- Mars Facts -->
           <div class="row" id="mars_dictionary.facts">
             <h4>Mars Facts</h4>
-            {{ mars.facts | safe }}
+            {{ mars_dictionary_db.facts | safe }}
           </div>
         </div>
       </div>
 
 
       <!-- Section for Mars Hemispheres -->
-      <div class="row" id="mars-hemispheres">
+      <div class="row" id="mars_dictionary_db.hemi_results'">
         <div class="page-header">
           <h2 class="text-center">Mars Hemispheres</h2>
         </div>
 
-        {% for hemisphere in mars_dictionary_db.hemispheres %}
-        <div class="col-md-6">
-          <div class="thumbnail">
-            <img src="{{mars_dictionary.hemispheres | default('static/images/error.png', true)}}" alt="...">
-            <div class="caption">
-              <h3>{{ hemisphere.title }}</h3>
-            </div>
-            {% endfor %}
+        {% for hemis in mars_dictionary_db.hemi_results %}
+        <div class="hemi-image">
+          
+          <h3>{{ hemis.title }}</h3>
+          <div class="keeptogether">
+            <br class="keeptogether">
+          <img src="{{ hemis.img_url }}" alt="{{ hemis.title }}">
+        </div>
+        </div>
+        {% endfor %}
+        
           </div>
         </div>
        

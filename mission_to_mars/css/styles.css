@@ -1,0 +1,13 @@
+.splitimage {
+    max-height: 100%;
+    max-width: 100%;
+    width: 33.3333%;
+    /* as there are 3 images in a line*/
+  }
+  .keeptogether {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 0;
+    word-spacing: -4px;
+  }

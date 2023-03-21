@@ -80,27 +80,19 @@ def mars_table():
 
 
 def hemispheres(browser):
-    url_hemis = 'https://marshemispheres.com/'
-    html_content = requests.get(url_hemis).text
-    soup = bs4(html_content, "html.parser")
-    mars_image = soup.find().text
-    # list_hemis = []
-    # list_hemis.append({title: #text,
-    #  img_url: #url
-    #  })
-    hemi_urls = []
+    '''search browser return title and links'''
+    browser.visit('https://marshemispheres.com/')
     links = [link for link in browser.find_by_css('div.description a')]
-        #print(item['src'])
+    hemisphere_data = []
+
     for link in links:
         link.click()
         img_url = browser.links.find_by_partial_href('full.jpg').first['href']
         title = ' '.join(browser.find_by_css('h2.title').text.split()[:-2])
-        hemi_urls.append({'img_url': img_url, 'title': title})
+        hemisphere_data.append({'img_url': img_url, 'title': title})
         browser.back()
-
-    #return list of links    
-    return hemi_urls
-    
+    return hemisphere_data
+        
 
 def scrape():
     ''' This scrapes the page. main function'''
@@ -108,16 +100,21 @@ def scrape():
     web_texts, titles, descriptions = lastest_news(browser)
     image_url = featured_mars(browser)
     mars_tbl = mars_table()
-    hemis = hemispheres()
+    hemi_results = hemispheres(browser)
 
+    #print(hemis)
+
+    #File "/Users/kelly.paredes/Desktop/web_challenge/mission_to_mars/templates/index.html", line 69, in top-level template code
+    #<img src="{{mars_dictionary.hemispheres | default('static/images/error.png', true)}}" alt="...">
     
     mars_dictionary = {'news_title': titles[0],
                        'news_paragraph': descriptions[0],
                        'featured_image': image_url,
                         'facts': mars_tbl,
-                        'hemispheres': hemis
+                        'hemi_results': hemi_results,
                        }
 
+    print(mars_dictionary)
     browser.quit()
 
     return mars_dictionary
